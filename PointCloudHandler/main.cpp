@@ -27,6 +27,6 @@ void filter3D(const std::string& inputPath, const std::string& outputPath)
 	std::vector<size_t> szstat;
 	std::tie(pcstat, szstat) = statfi;
 	auto pcFiltered = *pcstat;
-	std::cout << "check" << std::endl;
 	fileHandler->SaveTo(pcFiltered, outputPath);
+	delete fileHandler;
 }
