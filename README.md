@@ -1,5 +1,11 @@
 # PointCloudHandler
-[***This is currently a demo project***]
+[***This is currently a demo project***]  
+## Requirements  
+ - C++11
+ - flann
+ - Eigen  
+ 
+ Eigen and FLANN are header-only, to simplify the compilation on different platforms.  
 ## Introduction  
 Photogrammetry typically generates point cloud data sets with different point densities. In addition, measurement errors lead to rare outliers that further distort the results. This complicates working with the point cloud and makes it difficult to determine certain characteristics (for example, relative size). Some of these irregularities can be resolved by performing a statistical analysis of the neighborhood of each point and cutting off those that do not meet a certain criterion.
 This project presents the work of two algorithms for automatic removal of extra points:
