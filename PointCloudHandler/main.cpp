@@ -22,7 +22,7 @@ void filter3D(const std::string& inputPath, const std::string& outputPath)
 
 	auto pc = fileHandler->ReadFrom(inputPath);
 
-	auto statfi = pc.RemoveStatisticalOutliers(5, 10);
+	auto statfi = pc.RemoveStatisticalOutliers(50, 0.1); // demonstation example for girl_bag
 	std::shared_ptr<PointCloud> pcstat;
 	std::vector<size_t> szstat;
 	std::tie(pcstat, szstat) = statfi;
