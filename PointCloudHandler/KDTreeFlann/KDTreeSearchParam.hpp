@@ -10,7 +10,6 @@ namespace pointcloudhandler
 			{
 				Knn = 0,
 				Radius = 1,
-				Hybrid = 2,
 			};
 
 		public:
@@ -47,18 +46,6 @@ namespace pointcloudhandler
 
 		public:
 			double mRadius;
-		};
-
-		class KDTreeSearchParamHybrid : public KDTreeSearchParam {
-		public:
-			KDTreeSearchParamHybrid(double radius, int maxNN)
-				: KDTreeSearchParam(SearchType::Hybrid),
-				mRadius(radius),
-				mMaxNN(maxNN) {}
-
-		public:
-			double mRadius;
-			int mMaxNN;
 		};
 
 }  // namespace pointcloudhandler
