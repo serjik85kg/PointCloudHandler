@@ -40,7 +40,6 @@ There are 2 input parameters:
  I added a few unused functions and methods that could potentially be used in the future. In the future, I will expand this library and add a couple of new features. However, I don't have time to refactor this code right now.
  
 # TO DO:  
- - Add examples from 2D
  - Add .obj pointcloud examples
  - Edit main.cpp
  - Add new features to this project (in the development)
