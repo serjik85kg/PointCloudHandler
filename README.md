@@ -25,12 +25,16 @@ There are 2 input parameters:
   - ***radius*** - radius of the sphere that will be used for counting the neighbors;  
   - ***nbPoints*** - minimum count of points which this analyzing sphere should contain.  
   
- ## Outputs  
+ ## Results  
  One of my tasks at work was related to the fact that using photogrammetry we received a point cloud, but which contained noise and garbage points. And it was necessary to automate the clearing of the point cloud.  
  ### Input [girl bag point cloud]
  ![jpg](https://github.com/serjik85kg/PointCloudHandler/blob/main/examples/girl_bag.jpg)  
- ### Result [filtered]
+ ### Output [filtered]
  ![jpg](https://github.com/serjik85kg/PointCloudHandler/blob/main/examples/girl_bag_filtered.jpg)  
+ ### Input 2D + filtered output
+ ![jpg](https://github.com/serjik85kg/PointCloudHandler/blob/main/examples/2d_raw.jpg) 
+ ### Output example [detection from binary thresh filtered image]
+ ![jpg](https://github.com/serjik85kg/PointCloudHandler/blob/main/examples/2d_result.jpg)  
  __________________________________________________________________________________________________
  ## Remark
  I added a few unused functions and methods that could potentially be used in the future. In the future, I will expand this library and add a couple of new features. However, I don't have time to refactor this code right now.
