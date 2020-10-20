@@ -9,7 +9,7 @@
 namespace pointcloudhandler 
 {
 
-		PointCloud &PointCloud::Clear() 
+		PointCloud& PointCloud::Clear() 
 		{
 			mPoints.clear();
 			return *this;
@@ -35,13 +35,13 @@ namespace pointcloudhandler
 			return ComputeCenter(mPoints); 
 		}
 
-		PointCloud &PointCloud::Transform(const Eigen::Matrix4d &transformation) 
+		PointCloud& PointCloud::Transform(const Eigen::Matrix4d &transformation) 
 		{
 			TransformPoints(transformation, mPoints);
 			return *this;
 		}
 
-		PointCloud &PointCloud::Translate(const Eigen::Vector3d &translation, bool relative) 
+		PointCloud& PointCloud::Translate(const Eigen::Vector3d &translation, bool relative) 
 		{
 			TranslatePoints(translation, mPoints, relative);
 			return *this;
@@ -61,8 +61,6 @@ namespace pointcloudhandler
 
 		PointCloud& PointCloud::operator+=(const PointCloud &cloud) 
 		{
-			// We do not use std::vector::insert to combine std::vector because it will
-			// crash if the pointcloud is added to itself.
 			if (cloud.IsEmpty()) 
 				return (*this);
 			size_t oldVertNum = mPoints.size();
@@ -84,18 +82,13 @@ namespace pointcloudhandler
 			std::vector<double> distances(mPoints.size());
 			KDTreeFlann kdtree;
 			kdtree.SetGeometry(target);
-#ifdef _OPENMP
-#pragma omp parallel for schedule(static)
-#endif
 			for (int i = 0; i < (int)mPoints.size(); i++) 
 			{
 				std::vector<int> indices(1);
 				std::vector<double> dists(1);
 				if (kdtree.SearchKNN(mPoints[i], 1, indices, dists) == 0) 
 				{
-					/*utility::LogDebug(
-						"[ComputePointCloudToPointCloudDistance] Found a point "
-						"without neighbors.");*/
+					/*Found a point without neighbors.");*/
 					distances[i] = 0.0;
 				}
 				else 
@@ -106,7 +99,7 @@ namespace pointcloudhandler
 			return distances;
 		}
 
-		PointCloud &PointCloud::RemoveNoneFinitePoints(bool removeNan, bool removeInfinite) {
+		PointCloud& PointCloud::RemoveNoneFinitePoints(bool removeNan, bool removeInfinite) {
 			size_t oldPointNum = mPoints.size();
 			size_t k = 0;                                 // new index
 			for (size_t i = 0; i < oldPointNum; i++) 
@@ -170,9 +163,7 @@ namespace pointcloudhandler
 			Eigen::Matrix3d covariance;
 			std::tie(mean, covariance) = ComputeMeanAndCovariance();
 			Eigen::Matrix3d covInv = covariance.inverse();
-#ifdef _OPENMP
-#pragma omp parallel for schedule(static)
-#endif
+
 			for (int i = 0; i < (int)mPoints.size(); i++) 
 			{
 				Eigen::Vector3d p = mPoints[i] - mean;
@@ -185,18 +176,13 @@ namespace pointcloudhandler
 		{
 			std::vector<double> nnDis(mPoints.size());
 			KDTreeFlann kdtree(*this);
-#ifdef _OPENMP
-#pragma omp parallel for schedule(static)
-#endif
 			for (int i = 0; i < (int)mPoints.size(); i++) 
 			{
 				std::vector<int> indices(2);
 				std::vector<double> dists(2);
 				if (kdtree.SearchKNN(mPoints[i], 2, indices, dists) <= 1) 
 				{
-					/*utility::LogDebug(
-						"[ComputePointCloudNearestNeighborDistance] Found a point "
-						"without neighbors.");*/
+					/*Found a point without neighbors.");*/
 					nnDis[i] = 0.0;
 				}
 				else 

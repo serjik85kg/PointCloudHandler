@@ -21,30 +21,30 @@ namespace pointcloudhandler
 		class KDTreeFlann {
 		public:
 			KDTreeFlann();
-			KDTreeFlann(const Eigen::MatrixXd &data);
-			KDTreeFlann(const Geometry &geometry);
+			KDTreeFlann(const Eigen::MatrixXd& data);
+			KDTreeFlann(const Geometry& geometry);
 			~KDTreeFlann();
-			//KDTreeFlann(const KDTreeFlann &) = delete;
-			//KDTreeFlann &operator=(const KDTreeFlann &) = delete;
+			KDTreeFlann(const KDTreeFlann& ) = delete;
+			KDTreeFlann& operator=(const KDTreeFlann& ) = delete;
 
 		public:
-			bool SetMatrixData(const Eigen::MatrixXd &data);
-			bool SetGeometry(const Geometry &geometry);
+			bool SetMatrixData(const Eigen::MatrixXd& data);
+			bool SetGeometry(const Geometry& geometry);
 
 			template <typename T>
-			int Search(const T &query, const KDTreeSearchParam &param,
-				std::vector<int> &indices, std::vector<double> &distance2) const;
+			int Search(const T& query, const KDTreeSearchParam& param,
+				std::vector<int>& indices, std::vector<double>& distance2) const;
 
 			template <typename T>
-			int SearchKNN(const T &query, int knn,
-				std::vector<int> &indices, std::vector<double> &distance2) const;
+			int SearchKNN(const T& query, int knn,
+				std::vector<int>& indices, std::vector<double>& distance2) const;
 
 			template <typename T>
-			int SearchRadius(const T &query, double radius,
-				std::vector<int> &indices, std::vector<double> &distance2) const;
+			int SearchRadius(const T& query, double radius,
+				std::vector<int>& indices, std::vector<double>& distance2) const;
 
 		private:
-			bool SetRawData(const Eigen::Map<const Eigen::MatrixXd> &data);
+			bool SetRawData(const Eigen::Map<const Eigen::MatrixXd>& data);
 
 		protected:
 			std::vector<double> mData;

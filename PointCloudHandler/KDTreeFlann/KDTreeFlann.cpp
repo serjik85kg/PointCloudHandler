@@ -15,12 +15,12 @@ namespace pointcloudhandler {
 		{
 		}
 
-		KDTreeFlann::KDTreeFlann(const Eigen::MatrixXd &data) 
+		KDTreeFlann::KDTreeFlann(const Eigen::MatrixXd& data) 
 		{ 
 			SetMatrixData(data); 
 		}
 
-		KDTreeFlann::KDTreeFlann(const Geometry &geometry) 
+		KDTreeFlann::KDTreeFlann(const Geometry& geometry) 
 		{ 
 			SetGeometry(geometry);
 		}
@@ -29,21 +29,21 @@ namespace pointcloudhandler {
 		{
 		}
 
-		bool KDTreeFlann::SetMatrixData(const Eigen::MatrixXd & data) 
+		bool KDTreeFlann::SetMatrixData(const Eigen::MatrixXd& data) 
 		{
 			return SetRawData(Eigen::Map<const Eigen::MatrixXd>(data.data(), data.rows(), data.cols()));
 		}
 
 		// @ TO DO: add 2D pointclouds and other types
-		bool KDTreeFlann::SetGeometry(const Geometry & geometry) 
+		bool KDTreeFlann::SetGeometry(const Geometry& geometry) 
 		{
 			switch (geometry.GetGeometryType()) 
 			{
 			case Geometry::GeometryType::PointCloud:
 				return SetRawData(Eigen::Map<const Eigen::MatrixXd>(
-					(const double *)((const PointCloud &)geometry).mPoints.data(),
+					(const double *)((const PointCloud&)geometry).mPoints.data(),
 					3, 
-					((const PointCloud &)geometry).mPoints.size()));
+					((const PointCloud&)geometry).mPoints.size()));
 			case Geometry::GeometryType::Unknown:
 			default:
 				printf("[KDTreeFlann::SetGeometry] Unsupported Geometry type.");
@@ -52,15 +52,15 @@ namespace pointcloudhandler {
 		}
 
 		template <typename T>
-		int KDTreeFlann::Search(const T & query, const KDTreeSearchParam & param,
-			std::vector<int> & indices, std::vector<double> & distance2) const 
+		int KDTreeFlann::Search(const T& query, const KDTreeSearchParam& param,
+			std::vector<int>& indices, std::vector<double>& distance2) const 
 		{
 			switch (param.GetSearchType()) 
 			{
 			case KDTreeSearchParam::SearchType::Knn:
-				return SearchKNN(query, ((const KDTreeSearchParamKNN &)param).mKNN, indices, distance2);
+				return SearchKNN(query, ((const KDTreeSearchParamKNN&)param).mKNN, indices, distance2);
 			case KDTreeSearchParam::SearchType::Radius:
-				return SearchRadius(query, ((const KDTreeSearchParamRadius &)param).mRadius, indices, distance2);
+				return SearchRadius(query, ((const KDTreeSearchParamRadius&)param).mRadius, indices, distance2);
 			default:
 				return -1;
 			}
@@ -68,12 +68,9 @@ namespace pointcloudhandler {
 		}
 
 		template <typename T>
-		int KDTreeFlann::SearchKNN(const T & query, int knn,
-			std::vector<int> & indices, std::vector<double> & distance2) const 
+		int KDTreeFlann::SearchKNN(const T& query, int knn,
+			std::vector<int>& indices, std::vector<double> & distance2) const 
 		{
-			// This is optimized code for heavily repeated search.
-			// Other flann::Index::knnSearch() implementations lose performance due to
-			// memory allocation/deallocation.
 			if (mData.empty() || mDatasetSize <= 0 ||
 				size_t(query.rows()) != mDimension || knn < 0) 
 			{
@@ -91,13 +88,9 @@ namespace pointcloudhandler {
 		}
 
 		template <typename T>
-		int KDTreeFlann::SearchRadius(const T & query,double radius,
-			std::vector<int> & indices, std::vector<double> & distance2) const 
+		int KDTreeFlann::SearchRadius(const T& query,double radius,
+			std::vector<int>& indices, std::vector<double>& distance2) const 
 		{
-			// This is optimized code for heavily repeated search.
-			// Since maxnn is not given, we let flann to do its own memory management.
-			// Other flann::Index::radiusSearch() implementations lose performance due
-			// to memory management and CPU caching.
 			if (mData.empty() || mDatasetSize <= 0 ||
 				size_t(query.rows()) != mDimension) 
 			{
@@ -115,7 +108,7 @@ namespace pointcloudhandler {
 		}
 
 
-		bool KDTreeFlann::SetRawData(const Eigen::Map<const Eigen::MatrixXd> & data) {
+		bool KDTreeFlann::SetRawData(const Eigen::Map<const Eigen::MatrixXd>& data) {
 			mDimension = data.rows();
 			mDatasetSize = data.cols();
 			if (mDimension == 0 || mDatasetSize == 0) {
@@ -131,36 +124,40 @@ namespace pointcloudhandler {
 		}
 
 		template int KDTreeFlann::Search<Eigen::Vector3d>(
-			const Eigen::Vector3d & query,
-			const KDTreeSearchParam & param,
-			std::vector<int> & indices,
-			std::vector<double> & distance2) const;
+			const Eigen::Vector3d& query,
+			const KDTreeSearchParam& param,
+			std::vector<int>& indices,
+			std::vector<double>& distance2) const;
+
 		template int KDTreeFlann::SearchKNN<Eigen::Vector3d>(
-			const Eigen::Vector3d & query,
+			const Eigen::Vector3d& query,
 			int knn,
-			std::vector<int> & indices,
-			std::vector<double> & distance2) const;
+			std::vector<int>& indices,
+			std::vector<double>& distance2) const;
+
 		template int KDTreeFlann::SearchRadius<Eigen::Vector3d>(
-			const Eigen::Vector3d & query,
+			const Eigen::Vector3d& query,
 			double radius,
-			std::vector<int> & indices,
-			std::vector<double> & distance2) const;
+			std::vector<int>& indices,
+			std::vector<double>& distance2) const;
 
 		template int KDTreeFlann::Search<Eigen::VectorXd>(
-			const Eigen::VectorXd & query,
-			const KDTreeSearchParam & param,
-			std::vector<int> & indices,
-			std::vector<double> & distance2) const;
+			const Eigen::VectorXd& query,
+			const KDTreeSearchParam& param,
+			std::vector<int>& indices,
+			std::vector<double>& distance2) const;
+
 		template int KDTreeFlann::SearchKNN<Eigen::VectorXd>(
-			const Eigen::VectorXd & query,
+			const Eigen::VectorXd& query,
 			int knn,
-			std::vector<int> & indices,
-			std::vector<double> & distance2) const;
+			std::vector<int>& indices,
+			std::vector<double>& distance2) const;
+
 		template int KDTreeFlann::SearchRadius<Eigen::VectorXd>(
-			const Eigen::VectorXd & query,
+			const Eigen::VectorXd& query,
 			double radius,
-			std::vector<int> & indices,
-			std::vector<double> & distance2) const;
+			std::vector<int>& indices,
+			std::vector<double>& distance2) const;
 
 }  // namespace pointcloudhandler
 
